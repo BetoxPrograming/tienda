@@ -77,6 +77,140 @@ How was it tested or reviewed?
 
 ---
 
+## 🌿 Lesson Work Branch
+
+This repository uses a permanent working branch called `lesson-work`.
+
+The purpose of this branch is to manage weekly class progress in an organized way without working directly on `main`.
+
+| Branch | Purpose |
+|---|---|
+| `main` | Stable branch. It contains reviewed, completed, and approved updates. |
+| `lesson-work` | Active branch used only for weekly class work, class notes, and course-related code changes. |
+
+The `lesson-work` branch is reused every week and should not be deleted after each merge.
+
+---
+
+### 📌 Purpose of `lesson-work`
+
+The `lesson-work` branch is used only for changes made during weekly class sessions.
+
+This branch may include:
+
+| Allowed Change | Description |
+|---|---|
+| Class code changes | New or modified source code files created during class. |
+| Weekly notes | Files added or edited inside `docs/weekly-notes/`. |
+| Class-specific documentation | Documentation directly related to a weekly lesson or topic. |
+| Professor-guided implementation | Files required by the implementation developed during class. |
+
+This branch helps keep a clear separation between:
+
+```text
+Course material taught in class
+Personal experiments, improvements, or extra implementations
+```
+
+---
+
+### 🚫 Changes Not Recommended in `lesson-work`
+
+Avoid using `lesson-work` for changes that are not directly related to weekly class progress.
+
+Do not use this branch for:
+
+| Avoid | Reason |
+|---|---|
+| General README changes | These should be handled in a separate documentation branch. |
+| Repository-wide documentation restructuring | This is not weekly class work. |
+| Repository configuration changes | These should be handled in a `chore/` branch. |
+| Personal experiments | These should be handled in a separate feature or experiment branch. |
+| Extra implementations outside the class scope | These should be clearly separated from professor-guided content. |
+
+Recommended branch examples for changes outside class work:
+
+```text
+docs/update-readme
+docs/reorganize-documentation
+feat/personal-improvement
+refactor/project-structure
+chore/repository-config
+```
+
+> [!IMPORTANT]
+> `lesson-work` should represent what is being developed, practiced, or documented during class.  
+> Changes outside the weekly class scope should be managed in a separate branch.
+
+---
+
+### ✅ Weekly Class Commit Rules
+
+Commits made from `lesson-work` should clearly describe what changed during class.
+
+The commit should make clear:
+
+```text
+What changed?
+Which week or class topic does it belong to?
+Was it code, documentation, correction, or refactoring?
+```
+
+Recommended examples:
+
+```text
+✨ feat(lesson): add week 02 product controller
+📝 docs(lesson): add week 02 class notes
+🐛 fix(lesson): correct week 03 Thymeleaf route
+♻️ refactor(lesson): organize week 04 service logic
+```
+
+Bad examples:
+
+```text
+update
+class
+changes
+week work
+final
+```
+
+---
+
+### 🔄 Weekly Workflow
+
+```bash
+# Switch to the permanent class working branch
+git switch lesson-work
+
+# Update lesson-work with the latest remote changes
+git pull
+
+# Work on weekly class code, notes, or documentation
+
+# Review modified files before committing
+git status
+
+# Add only the files related to the weekly class work
+git add .
+
+# Commit the weekly class progress with a clear message
+git commit -m "✨ feat(lesson): add week XX class progress"
+
+# Push the lesson-work branch to GitHub
+git push
+```
+
+When the weekly progress is complete and reviewed, open a Pull Request from:
+
+```text
+lesson-work → main
+```
+
+After merging into `main`, keep using `lesson-work` for the next weekly class session.
+
+---
+
 ## 🧾 Git Commit Message Style
 
 Use this commit format:
