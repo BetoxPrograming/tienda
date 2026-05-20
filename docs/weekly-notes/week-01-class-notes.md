@@ -30,7 +30,7 @@ The professor made a quick overview of the evaluation. Each student must read th
 
 The course campus includes a table with all deliverables and dates:
 
-![Course deliverables table](docs/screenshots/course-deliverables.png)
+![Course deliverables table](../screenshots/course-deliverables.png)
 
 ---
 
@@ -167,6 +167,8 @@ Important configuration points:
 - Files were downloaded from the Week 01 resources.
 - These files were moved into the project.
 - The exact file movements should be reviewed in `clase01.mp4` or its transcription.
+> [!NOTE]
+> This resource is not hosted in this repository. It is a private student resource used only for personal review.
 
 Important detail:
 
