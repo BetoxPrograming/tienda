@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<!---  Mi primera pagina html -->
-<html>
-    <head>
-        <title>TechShop</title>
-        <meta charset="UTF-8"/>
-        <link href="/css/estilos.css" rel="stylesheet" type="text/css"/>
 
-    </head>
-    <body>
-        [[#{plantilla.suTienda}]]
-    </body>
+<!-- This is so pages can use extended tags. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+        <head th:replace="~{general/fragments :: head}"></head>
+        <body>
+            <header th:replace="~{general/fragments :: header}"></header>
+
+            <footer th:replace="~{general/fragments :: footer}"></footer>
+        </body>
 </html>
