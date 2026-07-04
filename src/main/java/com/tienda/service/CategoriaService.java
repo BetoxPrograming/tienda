@@ -46,7 +46,7 @@ public class CategoriaService {
     public void save(Categoria categoria, MultipartFile imagenFile){ //Multipartfoile es el tipo de dato de la iamgen
         //se salva la categoria
         categoriaRepository.save(categoria); //o actualiza o inserta, hace al eccon en el objeto, si tiene id o si no tiene id
-        if (imagenFile.isEmpty()){ // nsi no esta vaia el archivo, quiere decir que tra imagen para guardar
+        if (!imagenFile.isEmpty()){ // nsi no esta vaia el archivo, quiere decir que tra imagen para guardar
             try {
                 String ruta = firebaseStorageService.uploadImage(
                         imagenFile,
@@ -74,7 +74,7 @@ public class CategoriaService {
         try {
             categoriaRepository.deleteById(idCategoria); //aqui busca el id y borra la categoria
         } catch (DataIntegrityViolationException e){ //esto es por si la categoria a eliminar tiene productos
-            throw new IllegalArgumentException("La categoria no se puee elimiar, tiene productos asociados");
+            throw new IllegalStateException("La categoria no se puee elimiar, tiene productos asociados");
 
         }
 
