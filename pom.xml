@@ -1,101 +1,216 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Este archivo es el pom.xml.
+    Maven lo usa para saber:
+    - qué proyecto es este,
+    - qué versión de Java usa,
+    - qué librerías necesita,
+    - cómo debe compilarse,
+    - y cómo debe construirse la aplicación.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Versión del modelo de Maven. Normalmente se deja siempre así. -->
     <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        Proyecto padre de Spring Boot.
+        Esto le da al proyecto una configuración base ya preparada por Spring Boot.
+        También ayuda a manejar versiones de muchas dependencias automáticamente.
+    -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.0.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <!--
+        Identificación del proyecto.
+        groupId normalmente representa el paquete o la organización.
+        artifactId es el nombre técnico del proyecto.
+        version indica la versión actual del proyecto.
+    -->
     <groupId>com.tienda</groupId>
     <artifactId>Tienda</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>tienda</name>
     <description>tienda</description>
+
+    <!-- Información opcional del proyecto. En este caso está vacía. -->
     <url/>
+
+    <!-- Información opcional de licencia. En este caso está vacía. -->
     <licenses>
         <license/>
     </licenses>
+
+    <!-- Información opcional de desarrolladores. En este caso está vacía. -->
     <developers>
         <developer/>
     </developers>
+
+    <!-- Información opcional de control de versiones. En este caso está vacía. -->
     <scm>
         <connection/>
         <developerConnection/>
         <tag/>
         <url/>
     </scm>
+
+    <!--
+        Propiedades generales del proyecto.
+        Aquí se define la versión de Java que usa el proyecto.
+        En este caso se usa JDK 21.
+    -->
     <properties>
         <java.version>21</java.version>
     </properties>
+
+    <!--
+        Aquí van las dependencias.
+        Una dependencia es una librería externa que el proyecto necesita para funcionar.
+    -->
     <dependencies>
+
+        <!--
+            Thymeleaf.
+            Sirve para crear páginas HTML dinámicas desde Spring Boot.
+            Permite usar th:text, th:href, th:each, th:replace, fragmentos, etc.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
+        <!--
+            Spring Web.
+            Sirve para crear aplicaciones web con controladores, rutas y peticiones HTTP.
+            Permite usar @Controller, @GetMapping, @PostMapping, @RequestMapping, etc.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--
+            Spring Boot DevTools.
+            Ayuda durante el desarrollo.
+            Permite reinicios automáticos cuando se hacen cambios en el código.
+            Se usa solo en tiempo de ejecución.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <!--
+            Lombok.
+            Sirve para reducir código repetitivo en las clases Java.
+            Permite usar anotaciones como @Data, @Getter, @Setter, @NoArgsConstructor, etc.
+        -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!--
+            Spring Boot Starter Test.
+            Sirve para pruebas automatizadas.
+            Incluye herramientas para hacer pruebas unitarias y de integración.
+            Tiene scope test porque solo se usa al ejecutar pruebas.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <!--
+            Bootstrap por WebJars.
+            Permite usar Bootstrap desde Maven sin descargar archivos manualmente.
+            Bootstrap sirve para estilos, botones, tablas, formularios, modales, navbar, etc.
+        -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>5.3.8</version>
         </dependency>
 
+        <!--
+            Font Awesome por WebJars.
+            Sirve para usar íconos en las páginas web.
+            Por ejemplo: íconos de editar, eliminar, guardar, usuario, carrito, etc.
+        -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
             <version>7.2.0</version>
         </dependency>
 
+        <!--
+            jQuery por WebJars.
+            Librería de JavaScript usada para manipular elementos HTML y facilitar algunas interacciones.
+            En muchos proyectos se usa junto con componentes visuales o scripts existentes.
+        -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>4.0.0</version>
         </dependency>
 
+        <!--
+            Popper.js por WebJars.
+            Bootstrap lo usa para ciertos componentes que necesitan posicionamiento dinámico.
+            Por ejemplo: dropdowns, tooltips y popovers.
+        -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>popper.js</artifactId>
             <version>2.11.7</version>
         </dependency>
 
+        <!--
+            Conector de MySQL.
+            Permite que Spring Boot pueda conectarse a una base de datos MySQL.
+            Tiene scope runtime porque se necesita al ejecutar la aplicación.
+        -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
 
+        <!--
+            Spring Validation.
+            Sirve para validar datos de formularios y entidades.
+            Permite usar anotaciones como @NotNull, @NotEmpty, @Size, @Email, etc.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!--
+            Spring Data JPA.
+            Sirve para trabajar con bases de datos usando entidades y repositorios.
+            Permite usar @Entity, @Id, @GeneratedValue y JpaRepository.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!--
+            WebJars Locator Lite.
+            Ayuda a localizar archivos de WebJars sin tener que escribir siempre la versión en la ruta.
+            Facilita el uso de dependencias como Bootstrap, jQuery, Font Awesome, etc.
+        -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator-lite</artifactId>
@@ -103,12 +218,36 @@
 
     </dependencies>
 
+    <!--
+        Configuración de construcción del proyecto.
+        Aquí se indica cómo Maven debe generar el archivo final de la aplicación.
+    -->
     <build>
+
+        <!--
+            Nombre final del archivo generado.
+            Normalmente genera algo como app.jar.
+        -->
         <finalName>app</finalName>
+
+        <!--
+            Plugins usados durante la construcción del proyecto.
+            Los plugins no son librerías del programa, sino herramientas para compilar o empaquetar.
+        -->
         <plugins>
+
+            <!--
+                Plugin de Spring Boot para Maven.
+                Sirve para empaquetar y ejecutar la aplicación Spring Boot correctamente.
+            -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
+                <!--
+                    Se excluye Lombok del archivo final.
+                    Lombok ayuda a compilar, pero no necesita ir dentro del .jar final.
+                -->
                 <configuration>
                     <excludes>
                         <exclude>
@@ -118,16 +257,36 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <!--
+                Plugin compilador de Maven.
+                Controla cómo se compila el código Java.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+
+                <!--
+                    Ejecuciones del compilador.
+                    Aquí se configura la compilación normal y la compilación de pruebas.
+                -->
                 <executions>
+
+                    <!--
+                        Compilación principal del proyecto.
+                        Se ejecuta en la fase compile.
+                    -->
                     <execution>
                         <id>default-compile</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
+
+                        <!--
+                            Lombok se agrega como procesador de anotaciones.
+                            Esto permite que Maven entienda anotaciones como @Data.
+                        -->
                         <configuration>
                             <annotationProcessorPaths>
                                 <path>
@@ -137,12 +296,21 @@
                             </annotationProcessorPaths>
                         </configuration>
                     </execution>
+
+                    <!--
+                        Compilación de las pruebas.
+                        Se ejecuta en la fase test-compile.
+                    -->
                     <execution>
                         <id>default-testCompile</id>
                         <phase>test-compile</phase>
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
+
+                        <!--
+                            También se permite usar Lombok en clases de prueba.
+                        -->
                         <configuration>
                             <annotationProcessorPaths>
                                 <path>
