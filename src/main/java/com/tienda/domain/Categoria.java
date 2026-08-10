@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data // Generates getters, setters, toString, equals, and hashCode methods.
 @Entity // Indicates that this class is a JPA entity mapped to a database table.
@@ -32,5 +33,9 @@ public class Categoria implements Serializable {
 
     // Indicates whether the category is active or inactive.
     private boolean activo;
+
+    // Relación de uno a muchos con la clase Producto
+    @OneToMany(mappedBy = "categoria")
+    private List<Producto> productos;
 
 }
