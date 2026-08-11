@@ -3,11 +3,16 @@ package com.tienda.controller;
 import com.tienda.domain.Item;
 import com.tienda.domain.Factura;
 import com.tienda.domain.Usuario;
+import com.tienda.domain.Constante;
 import com.tienda.service.CarritoService;
 import com.tienda.service.FacturaService;
 import com.tienda.service.UsuarioService;
+import com.tienda.service.ConstanteService;
 import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +27,14 @@ public class CarritoController {
     private final CarritoService carritoService;
     private final UsuarioService usuarioService;
     private final FacturaService facturaService;
+    private final ConstanteService constanteService;
 
-    public CarritoController(CarritoService carritoService, UsuarioService usuarioService, FacturaService facturaService) {
+    public CarritoController(CarritoService carritoService, UsuarioService usuarioService,
+            FacturaService facturaService, ConstanteService constanteService) {
         this.carritoService = carritoService;
         this.usuarioService = usuarioService;
         this.facturaService = facturaService;
+        this.constanteService = constanteService;
     }
 
     // --- 1. MOSTRAR EL CARRITO ---
@@ -57,7 +65,9 @@ public class CarritoController {
             carritoService.guardarCarrito(session, carrito);
 
             // 4. Recalcular y actualizar el Model con los datos necesarios
-            model.addAttribute("carritoTotal", carritoService.calcularTotal(carrito));
+            BigDecimal totalColones = carritoService.calcularTotal(carrito);
+            model.addAttribute("carritoTotal", totalColones);
+            model.addAttribute("carritoTotalDolar", convierteDolares(totalColones));
             model.addAttribute("listaItems", carrito);
 
             // 5. Retornar el fragmento HTML
@@ -175,5 +185,17 @@ public class CarritoController {
         
         model.addAttribute("factura", factura);
         return "/carrito/verFactura"; // Nombre del archivo Thymeleaf
+    }
+
+
+    private BigDecimal convierteDolares(BigDecimal totalColones) {
+        double precioDolar = 0;
+        Optional<Constante> tipoCambio = constanteService.findByAtributo("dolar");
+        if (tipoCambio.isPresent()) {
+            precioDolar = Double.parseDouble(tipoCambio.get().getValor());
+        } else {
+            precioDolar = -1;
+        }
+        return totalColones.divide(BigDecimal.valueOf(precioDolar), 2, RoundingMode.HALF_UP);
     }
 }
