@@ -1,30 +1,30 @@
-# Week 12 — Carrito de compras
+# Week 12 — Shopping Cart
 
-## Objetivo de la clase
+## Class objective
 
-La Semana 12 implementa el carrito de compras y el proceso de facturación.
+Week 12 implements the shopping cart and billing process.
 
-El profesor explica que el carrito no se guarda directamente en una tabla de base de datos mientras el usuario navega. Se mantiene temporalmente en una variable de sesión como una lista de `Item`.
+The professor explains that the cart is not stored directly in a database table while the user is browsing. It is temporarily kept in a session variable as a list of `Item`.
 
-El flujo trabajado en clase es:
+The workflow developed in class is:
 
 ```text
-Producto
-→ agregar al carrito
-→ carrito en sesión
-→ modificar/eliminar cantidades
-→ facturar
-→ registrar Factura
-→ registrar Venta por cada producto
-→ descontar existencias
-→ limpiar carrito
-→ mostrar factura
-→ imprimir factura
+Product
+→ add to cart
+→ cart in session
+→ modify/delete quantities
+→ bill
+→ register Factura
+→ register Venta for each product
+→ decrease stock
+→ clear cart
+→ display invoice
+→ print invoice
 ```
 
 ## Domain
 
-Se agregan:
+The following classes are added:
 
 ```text
 EstadoFactura.java
@@ -33,7 +33,7 @@ Venta.java
 Item.java
 ```
 
-`EstadoFactura` es un `enum` con los estados:
+`EstadoFactura` is an `enum` with the states:
 
 ```text
 Activa
@@ -41,28 +41,28 @@ Pagada
 Anulada
 ```
 
-`Factura` representa el encabezado o maestro de la facturación.
+`Factura` represents the invoice header or master record.
 
-`Venta` representa cada línea de detalle de una factura.
+`Venta` represents each invoice detail line.
 
-`Item` no es una entidad JPA. Se utiliza temporalmente dentro del carrito y contiene un `Producto`, la cantidad deseada y el precio histórico.
+`Item` is not a JPA entity. It is used temporarily inside the shopping cart and contains a `Producto`, the requested quantity, and the historical price.
 
 ## Repository
 
-Se agregan:
+The following repositories are added:
 
 ```text
 FacturaRepository.java
 VentaRepository.java
 ```
 
-`FacturaRepository` incorpora la consulta JPQL:
+`FacturaRepository` includes the JPQL query:
 
 ```java
 findByIdFacturaConDetalle(...)
 ```
 
-que recupera en una sola consulta:
+which retrieves in a single query:
 
 ```text
 Factura
@@ -71,25 +71,25 @@ Ventas
 Productos
 ```
 
-para poder mostrar la factura completa después de procesarla.
+so the complete invoice can be displayed after the purchase is processed.
 
-No se crea `VentaService` durante esta clase.
+A `VentaService` is not created during this class.
 
 ## CarritoService
 
-`CarritoService` administra una variable de sesión llamada:
+`CarritoService` manages a session variable named:
 
 ```text
 carrito
 ```
 
-El carrito es:
+The cart is:
 
 ```java
 List<Item>
 ```
 
-El servicio permite:
+The service supports:
 
 ```text
 obtenerCarrito
@@ -104,20 +104,20 @@ limpiarCarrito
 procesarCompra
 ```
 
-Se valida que la cantidad solicitada no supere las existencias del producto.
+The requested quantity is validated so that it does not exceed the available stock.
 
-## Facturación
+## Billing
 
 `procesarCompra(...)`:
 
-1. valida que el carrito tenga productos;
-2. crea la `Factura`;
-3. registra una `Venta` por cada `Item`;
-4. conserva el precio histórico;
-5. descuenta las existencias del producto;
-6. devuelve la factura generada.
+1. validates that the cart contains products;
+2. creates the `Factura`;
+3. registers one `Venta` for each `Item`;
+4. keeps the historical price;
+5. decreases the product stock;
+6. returns the generated invoice.
 
-La factura queda con estado:
+The invoice is stored with the state:
 
 ```text
 Pagada
@@ -125,23 +125,23 @@ Pagada
 
 ## FacturaService
 
-`FacturaService` utiliza:
+`FacturaService` uses:
 
 ```java
 findByIdFacturaConDetalle(...)
 ```
 
-para recuperar una factura ya procesada con su usuario, ventas y productos.
+to retrieve a processed invoice together with its user, sales records, and products.
 
 ## CarritoController
 
-Se crea:
+The following controller is created:
 
 ```text
 src/main/java/com/tienda/controller/CarritoController.java
 ```
 
-Las rutas trabajadas son:
+The routes developed in class are:
 
 ```text
 GET  /carrito/listado
@@ -153,25 +153,25 @@ GET  /facturar/carrito
 GET  /carrito/verFactura
 ```
 
-La ruta:
+The route:
 
 ```text
 /facturar/carrito
 ```
 
-está separada de las rutas `/carrito/**` porque la facturación requiere un usuario autenticado.
+is separate from the `/carrito/**` routes because billing requires an authenticated user.
 
-Los `System.out.println(...)` utilizados temporalmente para depuración se eliminan durante la clase.
+The temporary `System.out.println(...)` statements used for debugging are removed during the class.
 
-## Templates del carrito
+## Cart templates
 
-El profesor crea:
+The professor creates:
 
 ```text
 src/main/resources/templates/carrito/
 ```
 
-y coloca:
+and adds:
 
 ```text
 fragmentos.html
@@ -180,7 +180,7 @@ modifica.html
 verFactura.html
 ```
 
-`fragmentos.html` contiene los fragmentos:
+`fragmentos.html` contains the fragments:
 
 ```text
 verCarrito
@@ -189,15 +189,15 @@ modificaItem
 detalleFactura
 ```
 
-### Fragmentos del carrito
+### Cart fragments
 
-El recurso:
+The resource:
 
 ```text
 src/main/resources/templates/carrito/fragmentos.html
 ```
 
-contiene los cuatro fragmentos utilizados por las vistas del carrito:
+contains the four fragments used by the cart views:
 
 ```text
 verCarrito
@@ -206,47 +206,47 @@ modificaItem
 detalleFactura
 ```
 
-El archivo se incorporó directamente desde el recurso proporcionado por el profesor.
+The file is incorporated directly from the resource provided by the professor.
 
 ## JavaScript
 
-En:
+In:
 
 ```text
 static/js/rutinas.js
 ```
 
-se agrega únicamente:
+only the following function is added:
 
 ```javascript
 addCart(formulario)
 ```
 
-La función:
+The function:
 
-- obtiene `idProducto`;
-- utiliza `/carrito/agregar`;
-- recupera el token CSRF;
-- hace el `POST` por AJAX;
-- coloca la respuesta en `#resultBlock`.
+- obtains `idProducto`;
+- uses `/carrito/agregar`;
+- retrieves the CSRF token;
+- performs the `POST` request through AJAX;
+- places the response inside `#resultBlock`.
 
-La función `mostrarImagen(...)` y las rutinas existentes se conservan.
+The existing `mostrarImagen(...)` function and previous routines are preserved.
 
 ## CSS
 
-El profesor indica retirar el `estilos.css` viejo utilizado desde las primeras semanas y sustituirlo completamente por el recurso de Semana 12.
+The professor instructs students to remove the old `estilos.css` used since the first weeks and replace it completely with the Week 12 resource.
 
-El nuevo CSS agrega:
+The new CSS adds:
 
-- efecto visual en las tarjetas;
-- reglas para impresión;
-- ocultamiento de elementos `d-print-none`.
+- a visual effect to cards;
+- printing rules;
+- hiding of elements marked with `d-print-none`.
 
-El profesor comenta que el efecto de zoom de las tarjetas pertenecía a un reto anterior, pero al entregar este recurso ya queda incorporado.
+The professor comments that the card zoom effect originally belonged to a previous challenge, but it is included in the resource delivered for this class.
 
 ## general/fragmentos.html
 
-Se agregan al `head`:
+The following elements are added to the `head`:
 
 ```html
 <link th:href="@{/css/estilos.css}" rel="stylesheet"/>
@@ -254,92 +254,92 @@ Se agregan al `head`:
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 ```
 
-El `rutinas.js` ya existente se mantiene una sola vez.
+The existing `rutinas.js` reference is kept only once.
 
-Para evitar imprimir encabezado y pie de página se agrega:
+To prevent the header and footer from being printed, the following class is added:
 
 ```text
 d-print-none
 ```
 
-al `header` y al `footer`.
+to both the `header` and the `footer`.
 
 ## consultas/fragmentos.html
 
-El formulario del botón del carrito ya existía desde semanas anteriores.
+The cart button form already existed from previous weeks.
 
-Durante la clase se verifica que el botón que ejecuta:
+During the class, the professor verifies that the button that executes:
 
 ```javascript
 addCart(this.form)
 ```
 
-sea:
+uses:
 
 ```html
 type="button"
 ```
 
-y no:
+instead of:
 
 ```html
 type="submit"
 ```
 
-porque el envío se realiza mediante AJAX.
+because the request is handled through AJAX.
 
-## Prueba realizada en clase
+## Test performed in class
 
-El profesor inicia sesión como:
+The professor signs in as:
 
 ```text
 rebeca / 456
 ```
 
-y prueba:
+and tests:
 
 ```text
-agregar productos
-aumentar cantidades
-rechazar cantidades mayores al inventario
-ver carrito
-eliminar
-modificar
-facturar
-ver factura
-imprimir
+add products
+increase quantities
+reject quantities greater than available stock
+view cart
+delete
+modify
+bill
+view invoice
+print
 ```
 
-Después revisa en la base de datos que existan los registros nuevos en:
+Afterward, the professor checks the database to confirm that new records exist in:
 
 ```text
 factura
 venta
 ```
 
-y que las existencias de los productos hayan disminuido.
+and that product stock has decreased.
 
-## Impresión
+## Printing
 
-El detalle de factura incluye un botón que utiliza:
+The invoice detail includes a button that uses:
 
 ```javascript
 window.print()
 ```
 
-Los botones de la factura y los elementos marcados con:
+The invoice buttons and all elements marked with:
 
 ```text
 d-print-none
 ```
 
-no deben aparecer en la impresión.
+must not appear in the printed version.
 
-El profesor también muestra que el navegador permite desactivar encabezados y pies de impresión desde la configuración de impresión.
+The professor also shows that the browser can disable its own print headers and footers from the print settings.
 
-## Base de datos
+## Database
 
-Durante la clase se utilizan las tablas que ya existen en el esquema del curso:
+During the class, the existing tables in the course schema are used:
 
 ```text
 factura
@@ -348,17 +348,17 @@ producto
 usuario
 ```
 
-No se realiza una creación manual nueva de tablas como paso de la clase.
+No new tables are manually created as part of this class.
 
-## Fuera del límite de Semana 12
+## Outside the Week 12 scope
 
-PayPal NO se implementa durante esta clase.
+PayPal is NOT implemented during this class.
 
-El profesor indica que en Semana 13 hay un tutorial/reto opcional para incorporar PayPal en sandbox.
+The professor mentions that Week 13 contains an optional tutorial/challenge to incorporate PayPal in sandbox mode.
 
-No debe agregarse PayPal al resultado de Semana 12.
+PayPal must not be added to the Week 12 result.
 
-## Archivos nuevos confirmados
+## Confirmed new files
 
 ```text
 src/main/java/com/tienda/controller/CarritoController.java
@@ -379,13 +379,13 @@ src/main/resources/templates/carrito/modifica.html
 src/main/resources/templates/carrito/verFactura.html
 ```
 
-También se incluye:
+The following file is also included:
 
 ```text
 src/main/resources/templates/carrito/fragmentos.html
 ```
 
-## Archivos modificados confirmados
+## Confirmed modified files
 
 ```text
 src/main/resources/static/css/estilos.css
@@ -394,31 +394,31 @@ src/main/resources/templates/general/fragmentos.html
 src/main/resources/templates/consultas/fragmentos.html
 ```
 
-No se agrega dependencia Maven en Semana 12.
+No Maven dependency is added in Week 12.
 
-## Checklist final
+## Final checklist
 
-- [ ] La aplicación inicia.
-- [ ] Los productos agotados mantienen deshabilitado el botón del carrito.
-- [ ] Un producto disponible se agrega sin recargar toda la página.
-- [ ] Aparece el botón/total de Ver Carrito.
-- [ ] `/carrito/listado` muestra los productos seleccionados.
-- [ ] Se puede eliminar un producto del carrito.
-- [ ] Se puede modificar la cantidad.
-- [ ] No se permite superar las existencias.
-- [ ] El carrito se mantiene en la sesión.
-- [ ] Facturar requiere autenticación.
-- [ ] La compra crea una factura.
-- [ ] Se crean las líneas de venta.
-- [ ] El inventario disminuye.
-- [ ] El carrito queda vacío después de facturar.
-- [ ] Se muestra el detalle de la factura.
-- [ ] La impresión funciona.
-- [ ] Header y footer no aparecen en la impresión.
+- [ ] The application starts.
+- [ ] Out-of-stock products keep the cart button disabled.
+- [ ] An available product can be added without reloading the entire page.
+- [ ] The View Cart button/total appears.
+- [ ] `/carrito/listado` displays the selected products.
+- [ ] A product can be removed from the cart.
+- [ ] The quantity can be modified.
+- [ ] The quantity cannot exceed available stock.
+- [ ] The cart remains stored in the session.
+- [ ] Billing requires authentication.
+- [ ] The purchase creates a `Factura`.
+- [ ] The `Venta` detail records are created.
+- [ ] Product stock decreases.
+- [ ] The cart is cleared after billing.
+- [ ] The invoice detail is displayed.
+- [ ] Printing works.
+- [ ] The header and footer do not appear in the printed version.
 
-## Commit usado por el profesor
+## Commit used by the professor
 
-Al final de la grabación el profesor confirma el nombre:
+At the end of the recording, the professor confirms the commit message:
 
 ```text
 Semana 12, carrito de compras

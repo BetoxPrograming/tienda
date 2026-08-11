@@ -1,21 +1,21 @@
-# Week 13 — Constantes y permisos
+# Week 13 — Constants and Permissions
 
-## Objetivos
+## Objectives
 
-La Semana 13 tiene dos objetivos principales:
+Week 13 has two main objectives:
 
 ```text
-1. Crear el CRUD de constantes y utilizar sus valores desde el código.
-2. Permitir que un ADMIN gestione los roles de otros usuarios.
+1. Create the Constants CRUD and use its values from the code.
+2. Allow an ADMIN to manage other users' roles.
 ```
 
-La transcripción inicia precisamente indicando esas dos acciones.
+The transcript begins by identifying exactly these two tasks.
 
 ---
 
-## Parte 1 — CRUD de Constantes
+## Part 1 — Constants CRUD
 
-Se crea el flujo normal del curso:
+The standard course workflow is used:
 
 ```text
 domain
@@ -25,7 +25,7 @@ controller
 templates
 ```
 
-Archivos:
+Files:
 
 ```text
 src/main/java/com/tienda/domain/Constante.java
@@ -38,13 +38,13 @@ src/main/resources/templates/constante/listado.html
 src/main/resources/templates/constante/modifica.html
 ```
 
-La entidad mapea la tabla:
+The entity maps the table:
 
 ```text
 constante
 ```
 
-con los campos principales:
+with the main fields:
 
 ```text
 idConstante
@@ -52,230 +52,216 @@ atributo
 valor
 ```
 
-La idea es que `atributo` funcione como identificador de una configuración y
-`valor` contenga el dato que se necesita recuperar.
+The purpose is for `atributo` to work as the identifier of a configuration value and for `valor` to contain the value that must be retrieved.
 
 ---
 
-## Consulta derivada por atributo
+## Derived query by attribute
 
-`ConstanteRepository` agrega:
+`ConstanteRepository` adds:
 
 ```java
 findByAtributo(String atributo)
 ```
 
-y `ConstanteService` expone la misma búsqueda.
+and `ConstanteService` exposes the same search operation.
 
-Esto permite utilizar expresiones como:
+This makes it possible to use attributes such as:
 
 ```text
 dolar
 servidor.http
 ```
 
-sin escribir esos valores directamente dentro del código.
+without writing those values directly in the application code.
 
 ---
 
-## Prueba del CRUD
+## CRUD test
 
-El profesor entra como:
+The professor signs in as:
 
 ```text
 juan / 123
 ```
 
-y abre:
+and opens:
 
 ```text
-Administración → Constantes
+Administration → Constants
 ```
 
-Desde ahí comprueba el listado y la modificación de constantes.
+From there, the professor verifies the constants list and modification process.
 
-Durante la clase cambia:
+During the class, the value is changed to:
 
 ```text
 dolar → 445
 ```
 
-para utilizarlo en el ejercicio del carrito.
+so it can be used in the shopping cart exercise.
 
 ---
 
-## Parte 2 — Total del carrito en dólares
+## Part 2 — Cart total in dollars
 
-El profesor modifica:
+The professor modifies:
 
 ```text
 src/main/java/com/tienda/controller/CarritoController.java
 ```
 
-Se agrega:
+`ConstanteService` is added to the controller.
 
-```text
-ConstanteService
-```
-
-al controlador.
-
-En `agregar(...)` primero se guarda el total calculado en colones:
+Inside `agregar(...)`, the calculated total in colones is first stored in:
 
 ```java
 BigDecimal totalColones = carritoService.calcularTotal(carrito);
 ```
 
-y después se agrega al modelo el equivalente en dólares:
+and then the dollar equivalent is added to the model as:
 
 ```text
 carritoTotalDolar
 ```
 
-Se crea el método privado:
+A private method is created:
 
 ```text
 convierteDolares(...)
 ```
 
-Su objetivo es:
+Its purpose is:
 
 ```text
-buscar "dolar"
-→ obtener su valor String
-→ convertirlo a número
-→ dividir el total en colones entre el tipo de cambio
+search for "dolar"
+→ obtain its String value
+→ convert it to a numeric value
+→ divide the total in colones by the exchange rate
 ```
 
-Durante la clase la división con `BigDecimal` presenta un error cuando el
-resultado no termina exactamente. Después del receso se agrega redondeo a la
-operación y la conversión queda funcionando.
+During the class, the `BigDecimal` division produces an error when the result is not exact. After the break, rounding is added to the operation and the conversion works correctly.
 
 ---
 
-## Fragmento del carrito
+## Cart fragment
 
-Se modifica únicamente el primer fragmento de:
+Only the first fragment in:
 
 ```text
 templates/carrito/fragmentos.html
 ```
 
-para mostrar:
+is modified to display:
 
 ```text
-total en colones / total en dólares
+total in colones / total in dollars
 ```
 
-El profesor decide no aplicar `formatCurrency` al valor en dólares y utiliza
-el símbolo `$` directamente.
+The professor decides not to apply `formatCurrency` to the dollar value and instead uses the `$` symbol directly.
 
 ---
 
-## Parte 3 — `servidor.http` desde Constantes
+## Part 3 — `servidor.http` from Constants
 
-En Semana 11 el servidor utilizado para los enlaces de activación se obtenía
-desde:
+In Week 11, the server used for activation links was obtained from:
 
 ```text
 application.properties
 ```
 
-En Semana 13 el profesor modifica:
+In Week 13, the professor modifies:
 
 ```text
 RegistroService.java
 ```
 
-para inyectar:
+to inject:
 
 ```text
 ConstanteService
 ```
 
-y obtener:
+and retrieve:
 
 ```text
 servidor.http
 ```
 
-desde la tabla `constante`.
+from the `constante` table.
 
-El recurso oficial deja el valor en:
+The official resource keeps the value in:
 
 ```java
 private final String servidor;
 ```
 
-y lo inicializa en el constructor consultando:
+and initializes it in the constructor by searching for:
 
 ```text
 servidor.http
 ```
 
-La antigua lectura con `@Value("${servidor.http}")` queda comentada.
+The previous `@Value("${servidor.http}")` approach remains commented out.
 
-La finalidad explicada en clase es poder cambiar entre localhost y Render
-modificando la constante, sin tener que recompilar solamente para cambiar esa URL.
+The purpose explained in class is to switch between localhost and Render by modifying the constant, without recompiling only to change that URL.
 
 ---
 
-# Parte 4 — Permisos de usuarios
+# Part 4 — User permissions
 
-El profesor no desarrolla CRUD de Roles ni CRUD de Rutas.
+The professor does not develop a Roles CRUD or a Routes CRUD.
 
-Esos dos enlaces quedan como trabajo que los estudiantes pueden completar
-por su cuenta porque son CRUD similares a los anteriores.
+Those two links are left as work that students may complete on their own because they are similar to the CRUD operations already developed in the course.
 
-Lo que sí se desarrolla en clase es:
+What is actually implemented in class is:
 
 ```text
-Administración
-→ Seguridad
-→ Permisos
+Administration
+→ Security
+→ Permissions
 ```
 
 ---
 
 ## UsuarioService
 
-Al final de:
+At the end of:
 
 ```text
 src/main/java/com/tienda/service/UsuarioService.java
 ```
 
-se agregan dos métodos:
+two methods are added:
 
 ```text
 getRolesNombres()
 eliminarRol(...)
 ```
 
-`getRolesNombres()` obtiene los nombres de todos los roles.
+`getRolesNombres()` retrieves the names of all roles.
 
-`eliminarRol(...)` busca el usuario, elimina de su colección el rol indicado y
-guarda nuevamente el usuario.
+`eliminarRol(...)` searches for the user, removes the specified role from the user's role collection, and saves the user again.
 
-El método ya existente:
+The existing method:
 
 ```text
 asignarRolPorUsername(...)
 ```
 
-se reutiliza para agregar permisos.
+is reused to add permissions.
 
 ---
 
 ## UsuarioRolController
 
-Se crea:
+The following controller is created:
 
 ```text
 src/main/java/com/tienda/controller/UsuarioRolController.java
 ```
 
-Rutas:
+Routes:
 
 ```text
 GET /usuario_rol/mantenimiento
@@ -284,80 +270,78 @@ GET /usuario_rol/agregar
 GET /usuario_rol/eliminar
 ```
 
-La pantalla permite:
+The page allows an administrator to:
 
 ```text
-buscar usuario por username
-ver roles asignados
-ver roles disponibles
-agregar rol
-eliminar rol
+search for a user by username
+view assigned roles
+view available roles
+add a role
+remove a role
 ```
 
 ---
 
-## Templates de permisos
+## Permission templates
 
-Se crea la carpeta:
+The following folder is created:
 
 ```text
 src/main/resources/templates/usuario_rol/
 ```
 
-con:
+with:
 
 ```text
 fragmentos.html
 mantenimiento.html
 ```
 
-El profesor aclara que debe ser un folder dentro de `templates`, no un paquete Java.
+The professor clarifies that this must be a folder inside `templates`, not a Java package.
 
 ---
 
-## Prueba realizada
+## Test performed in class
 
-El profesor entra como Juan y busca:
+The professor signs in as Juan and searches for:
 
 ```text
 rebeca
 ```
 
-Rebeca inicialmente tiene sus permisos normales.
+Rebeca initially has her normal permissions.
 
-Juan le agrega:
+Juan adds:
 
 ```text
 ADMIN
 ```
 
-Después se cierra la sesión y se entra como Rebeca.
+Then the session is closed and the professor signs in as Rebeca.
 
-Rebeca ahora puede ver el menú de Administración porque su nuevo rol se está
-leyendo desde la base de datos.
+Rebeca can now see the Administration menu because her new role is being read from the database.
 
-Como segunda demostración se quitan permisos a Juan y posteriormente Rebeca
-se los devuelve.
+As a second demonstration, permissions are removed from Juan and Rebeca later restores them.
 
-Esto demuestra que la gestión de permisos queda funcionando dinámicamente.
+This confirms that permission management works dynamically.
 
 ---
 
-## Lo que NO se hace en Semana 13
+## What is NOT implemented in Week 13
 
-No se implementa en la grabación:
+The recording does not implement:
 
 ```text
-CRUD de Roles
-CRUD de Rutas
+Roles CRUD
+Routes CRUD
 PayPal
 ```
 
-No deben agregarse como parte de la reproducción de esta clase.
+These must not be added as part of the Week 13 class reproduction.
 
 ---
 
-## Archivos nuevos
+## New files
 
 ```text
 src/main/java/com/tienda/domain/Constante.java
@@ -374,7 +358,7 @@ src/main/resources/templates/usuario_rol/fragmentos.html
 src/main/resources/templates/usuario_rol/mantenimiento.html
 ```
 
-## Archivos modificados
+## Modified files
 
 ```text
 src/main/java/com/tienda/controller/CarritoController.java
@@ -383,52 +367,48 @@ src/main/java/com/tienda/service/UsuarioService.java
 src/main/resources/templates/carrito/fragmentos.html
 ```
 
-No se agrega una dependencia nueva a Maven durante esta clase.
+No new Maven dependency is added during this class.
 
-Los archivos de mensajes actuales ya contienen las llaves utilizadas por las
-vistas suministradas, por lo que no se reemplaza el `messages.properties`
-actual por el recurso completo.
+The current message files already contain the keys used by the supplied views, so the existing `messages.properties` file is not replaced with the complete resource.
 
 ---
 
-## Pruebas finales
+## Final tests
 
 ```text
-1. Iniciar como Juan.
-2. Administración → Constantes.
-3. Confirmar que el CRUD de constantes abre.
-4. Confirmar que existe la constante "dolar".
-5. Agregar un producto al carrito.
-6. Confirmar que el botón del carrito muestra colones y dólares.
-7. Administración → Seguridad → Permisos.
-8. Buscar a Rebeca.
-9. Agregarle ADMIN.
-10. Cerrar sesión.
-11. Entrar como Rebeca.
-12. Confirmar que aparece Administración.
-13. Dejar nuevamente los roles como correspondan.
+1. Sign in as Juan.
+2. Open Administration → Constants.
+3. Confirm that the Constants CRUD opens.
+4. Confirm that the "dolar" constant exists.
+5. Add a product to the cart.
+6. Confirm that the cart button displays colones and dollars.
+7. Open Administration → Security → Permissions.
+8. Search for Rebeca.
+9. Add ADMIN to Rebeca.
+10. Sign out.
+11. Sign in as Rebeca.
+12. Confirm that Administration appears.
+13. Restore the roles to the desired final state.
 ```
 
-También debe existir:
+The following constant must also exist:
 
 ```text
 servidor.http
 ```
 
-en la tabla `constante`, porque `RegistroService` ahora lo obtiene desde ahí.
+in the `constante` table because `RegistroService` now retrieves it from there.
 
 ---
 
-## Cierre de la clase
+## End of class
 
-El profesor realiza el commit con el texto:
+The professor creates the commit using the text:
 
 ```text
 Semana 13, constantes y permisos
 ```
 
-Después hace push y explica cómo utilizar el historial de GitHub como evidencia
-del portafolio.
+Then the professor pushes the repository and explains how to use the GitHub commit history as portfolio evidence.
 
-También aclara al final de la grabación que Roles y Rutas no fueron
-implementados durante la clase.
+At the end of the recording, the professor also clarifies that Roles and Routes were not implemented during the class.
